@@ -23,9 +23,10 @@ if (String.IsNullOrEmpty(aiHost))
     aiHost = "OpenAI";
 }
 
-switch (aiHost) {
+switch (aiHost)
+{
     case "github":
-        #pragma warning disable SKEXP0070 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable SKEXP0070 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         builder.Services.AddAzureAIInferenceChatCompletion(
             modelId: builder.Configuration["GITHUB_MODEL_NAME"],
             builder.Configuration["GITHUB_TOKEN"],
@@ -38,14 +39,25 @@ switch (aiHost) {
             new Uri(builder.Configuration["AZURE_MODEL_ENDPOINT"]!));
         break;
     case "local":
+        var localModelName = builder.Configuration["LOCAL_MODEL_NAME"];
+        var localEndpoint = builder.Configuration["LOCAL_ENDPOINT"];
+
+        if (string.IsNullOrEmpty(localModelName) || string.IsNullOrEmpty(localEndpoint))
+            throw new InvalidOperationException("LOCAL_MODEL_NAME or LOCAL_ENDPOINT is not set in configuration.");
+
         builder.Services.AddOllamaChatCompletion(
-            modelId: builder.Configuration["LOCAL_MODEL_NAME"],
-            endpoint: new Uri(builder.Configuration["LOCAL_ENDPOINT"]!));
+            modelId: localModelName,
+            endpoint: new Uri(localEndpoint));
         break;
     default:
-        builder.Services.AddAzureOpenAIChatCompletion(builder.Configuration["AZURE_OPENAI_DEPLOYMENT"]!,
-            builder.Configuration["AZURE_OPENAI_ENDPOINT"]!,
-            new DefaultAzureCredential());
+
+        var azureOpenAiDeployment = builder.Configuration["AZURE_OPENAI_DEPLOYMENT"];
+        var azureOpenAiEndpoint = builder.Configuration["AZURE_OPENAI_ENDPOINT"];
+
+        if (string.IsNullOrEmpty(azureOpenAiDeployment) || string.IsNullOrEmpty(azureOpenAiEndpoint))
+            throw new InvalidOperationException("AZURE_OPENAI_DEPLOYMENT or AZURE_OPENAI_ENDPOINT is not set in configuration.");
+
+        builder.Services.AddAzureOpenAIChatCompletion(azureOpenAiDeployment, azureOpenAiEndpoint, new DefaultAzureCredential());
         break;
 }
 
