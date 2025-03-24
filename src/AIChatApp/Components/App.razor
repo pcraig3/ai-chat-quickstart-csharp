@@ -1,21 +1,40 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html class="no-js" lang="en" dir="ltr">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/" />
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="AIChatApp.styles.css" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <HeadOutlet @rendermode="@PageRenderMode" />
-</head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <base href="/" />
+        <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
 
-<body>
-    <Routes @rendermode="@PageRenderMode"/>
-    <script src="_framework/blazor.web.js"></script>
-</body>
+        <!-- using GCWeb 16.5.0  -->
+        <link href="/GCWeb/assets/favicon.ico" rel="icon" type="image/x-icon" />
+        <link rel="stylesheet" href="/GCWeb/css/theme.min.css" />
+        <noscript>
+            <link rel="stylesheet" href="/wet-boew/css/noscript.min.css" />
+        </noscript>
+
+        <link rel="stylesheet" href="app.css" />
+        <link rel="stylesheet" href="AIChatApp.styles.css" />
+        <link rel="icon" type="image/png" href="favicon.png" />
+        <HeadOutlet @rendermode="@PageRenderMode" />
+    </head>
+
+    <body vocab="http://schema.org/" typeof="WebPage">
+        <!-- #TODO make sure this actually links to something  -->
+        <SkipLink />
+        <Header />
+        <Routes @rendermode="@PageRenderMode" />
+        <Footer />
+
+        <script src="_framework/blazor.web.js"></script>
+
+
+        <!-- using GCWeb 16.5.0  -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+        <script src="/wet-boew/js/wet-boew.min.js"></script>
+        <script src="/GCWeb/js/theme.min.js"></script>
+    </body>
 
 </html>
 
