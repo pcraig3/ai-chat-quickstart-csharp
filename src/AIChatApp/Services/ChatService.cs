@@ -12,10 +12,16 @@ internal class ChatService(IChatCompletionService chatService)
 
         ChatMessageContent response = await chatService.GetChatMessageContentAsync(history);
 
+        var textContent = response.Items[0] as TextContent;
+        if (textContent is null || string.IsNullOrEmpty(textContent.Text))
+        {
+            throw new InvalidOperationException("Invalid or empty text content.");
+        }
+
         return new Message()
         {
             IsAssistant = response.Role == AuthorRole.Assistant,
-            Content = (response.Items[0] as TextContent).Text
+            Content = textContent.Text
         };
     }
 
@@ -27,7 +33,10 @@ internal class ChatService(IChatCompletionService chatService)
 
         await foreach (StreamingChatMessageContent content in response)
         {
-            yield return (content.Content);
+            if (!string.IsNullOrEmpty(content.Content))
+            {
+                yield return content.Content;
+            }
         }
     }
 
