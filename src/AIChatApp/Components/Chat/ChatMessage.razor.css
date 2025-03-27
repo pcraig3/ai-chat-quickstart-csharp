@@ -1,13 +1,21 @@
 .message {
+  animation: message-appear 0.25s ease-out;
+  overflow-y: hidden;
+  border-radius: 5px;
+  max-width: 80%;
+}
+
+.message:not(.assistant) {
+  background-color: #d7e5f5;
+  align-self: flex-end;
+}
+
+.message.assistant {
   display: flex;
   flex-direction: column;
 
   background-color: #fff;
   border: 1px solid #d9d9d9;
-  border-radius: 5px;
-
-  animation: message-appear 0.25s ease-out;
-  overflow-y: hidden;
 }
 
 @keyframes message-appear {

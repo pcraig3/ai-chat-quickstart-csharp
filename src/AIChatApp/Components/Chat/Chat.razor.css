@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--header-height));
+  min-height: 33vh;
 }
 
 .chat .messages-scroller {
@@ -16,23 +17,22 @@
   display: flex;
   flex-direction: column;
   padding-top: 1rem;
-  gap: 1rem;
+  gap: 2rem;
   align-items: flex-start;
   margin-bottom: auto;
 }
 
 .chat .write-message {
-  height: 160px;
   flex-shrink: 0;
-  padding: 0.5rem 1rem 1.5rem 1rem;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   align-items: center;
+  padding: 20px 0 15px 0;
 }
 
 .chat .write-message textarea {
   --control-corner-radius: 20;
-  --focus-stroke-width: 0;
+  min-height: 90px;
+  width: 100%;
 }

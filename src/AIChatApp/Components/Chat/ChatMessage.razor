@@ -12,7 +12,6 @@
 else
 {
     <div class="message">
-        <div class="sender-name">You</div>
         <div class="message-content">
             <div class="message-text">@State.Content</div>
         </div>
@@ -22,4 +21,4 @@ else
 @code {
     [Parameter, EditorRequired]
     public Message State { get; set; } = default!;
-} 
+}
