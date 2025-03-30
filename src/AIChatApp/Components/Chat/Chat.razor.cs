@@ -21,6 +21,7 @@ public partial class Chat
             {
                 await using var module = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/Chat/Chat.razor.js");
                 await module.InvokeVoidAsync("submitOnEnter", writeMessageElement);
+                await module.InvokeVoidAsync("autoResizeTextarea", "expanding-textarea", 3, 5);
             }
             catch (JSDisconnectedException)
             {
@@ -37,21 +38,23 @@ public partial class Chat
         {
             // Add the user's message to the UI
             // TODO: Don't rely on "magic strings" for the Role
-            messages.Add(new Message() {
+            messages.Add(new Message()
+            {
                 IsAssistant = false,
                 Content = userMessageText
-                });
-                
+            });
+
             userMessageText = null;
 
             ChatRequest request = new ChatRequest(messages);
 
             // Add a temporary message that a response is being generated
-            Message assistantMessage = new Message() {
+            Message assistantMessage = new Message()
+            {
                 IsAssistant = true,
                 Content = ""
-                };
-            
+            };
+
             messages.Add(assistantMessage);
             StateHasChanged();
 
