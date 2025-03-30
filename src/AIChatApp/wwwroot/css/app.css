@@ -7,6 +7,21 @@ body {
   height: 100%;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page {
+  flex: 1;
+}
+
 a,
 .btn-link {
   color: #006bb7;
@@ -28,7 +43,6 @@ a,
 
 .content {
   padding-top: 1.1rem;
-  --header-height: 300px;
 }
 
 h1:focus {

@@ -21,15 +21,15 @@
     </head>
 
     <body vocab="http://schema.org/" typeof="WebPage">
-        <!-- #TODO make sure this actually links to something  -->
-        <SkipLink />
-        <PhaseBanner />
-        <Header />
-        <Routes @rendermode="@PageRenderMode" />
-        <Footer />
-
+        <div class="wrap">
+            <!-- #TODO make sure this actually links to something  -->
+            <SkipLink />
+            <PhaseBanner />
+            <Header />
+            <Routes @rendermode="@PageRenderMode" />
+            <Footer />
+        </div>
         <script src="_framework/blazor.web.js"></script>
-
 
         <!-- using GCWeb 16.5.0  -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
