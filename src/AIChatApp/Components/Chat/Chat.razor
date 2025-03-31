@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <form class="messages-form" @ref="@writeMessageElement" @onsubmit="@SendMessage">
+    <form class="messages-form" @ref="@writeMessageElement" @onsubmit="@SendMessage" @onsubmit:preventDefault>
         <textarea @bind="@userMessageText" Placeholder="Ask the AI assistant" class="form-control mb-2 message-form"
             rows="3" id="expanding-textarea" />
         <button type="submit" class="btn btn-primary">Send</button>

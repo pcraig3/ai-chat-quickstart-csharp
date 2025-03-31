@@ -17,6 +17,8 @@ builder.Services.AddRazorComponents()
 // Configure AI related features
 builder.Services.AddKernel();
 
+builder.Services.AddHttpClient<SearchService>();
+
 var aiHost = builder.Configuration["AIHost"];
 if (String.IsNullOrEmpty(aiHost))
 {

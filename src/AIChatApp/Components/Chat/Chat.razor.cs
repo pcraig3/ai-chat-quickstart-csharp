@@ -9,6 +9,8 @@ public partial class Chat
 {
     [Inject]
     internal ChatService? ChatHandler { get; init; }
+    [Inject]
+    internal SearchService? SearchHandler { get; init; }
     List<Message> messages = new();
     ElementReference writeMessageElement;
     string? userMessageText;
@@ -32,31 +34,55 @@ public partial class Chat
 
     async void SendMessage()
     {
-        if (ChatHandler is null) { return; }
+        if (ChatHandler is null || SearchHandler is null) return;
 
         if (!string.IsNullOrWhiteSpace(userMessageText))
         {
-            // Add the user's message to the UI
-            // TODO: Don't rely on "magic strings" for the Role
+            var docs = await SearchHandler.GetTopChunks(userMessageText);
+            string context = string.Join("\n", docs);
+            string prompt = "You are a helpful assistant who answers submitted questions based on the context contained in the triple backticks. If you don't know the answer, just say \"I don't know, that's not in Paul's CV.\" Don't try to make up an answer.";
+
+            string finalPrompt = $@"
+            {prompt}
+
+            Context:
+            ```
+            {context}
+            ```
+
+            Question: {userMessageText}
+            Helpful Answer:
+            ";
+
+            // Show user's original message in the chat UI
             messages.Add(new Message()
             {
                 IsAssistant = false,
                 Content = userMessageText
             });
 
+            // clear message
             userMessageText = null;
 
-            ChatRequest request = new ChatRequest(messages);
-
-            // Add a temporary message that a response is being generated
+            // Create a temporary assistant message in the UI
             Message assistantMessage = new Message()
             {
                 IsAssistant = true,
                 Content = ""
             };
-
             messages.Add(assistantMessage);
             StateHasChanged();
+
+            // Send ONLY the RAG-augmented prompt to the model
+            var modelMessages = new List<Message>
+            {
+                new Message()
+                {
+                    IsAssistant = false,
+                    Content = finalPrompt
+                }
+            };
+            ChatRequest request = new ChatRequest(modelMessages);
 
             IAsyncEnumerable<string> chunks = ChatHandler.Stream(request);
 
