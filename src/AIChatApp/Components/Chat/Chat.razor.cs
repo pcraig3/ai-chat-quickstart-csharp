@@ -40,7 +40,7 @@ public partial class Chat
         {
             var docs = await SearchHandler.GetTopChunks(userMessageText);
             string context = string.Join("\n", docs);
-            string prompt = "You are a helpful assistant who answers submitted questions based on the context contained in the triple backticks. If you don't know the answer, just say \"I don't know, that's not in Paul's CV.\" Don't try to make up an answer.";
+            string prompt = "You are a helpful assistant who answers submitted questions based on the context contained in the triple backticks. Respond in 1-2 sentences. If you don't know the answer, just say \"I don't know, that's not in Paul's CV.\", don't try to make up an answer.";
 
             string finalPrompt = $@"
             {prompt}
@@ -51,7 +51,6 @@ public partial class Chat
             ```
 
             Question: {userMessageText}
-            Helpful Answer:
             ";
 
             // Show user's original message in the chat UI
@@ -64,15 +63,6 @@ public partial class Chat
             // clear message
             userMessageText = null;
 
-            // Create a temporary assistant message in the UI
-            Message assistantMessage = new Message()
-            {
-                IsAssistant = true,
-                Content = ""
-            };
-            messages.Add(assistantMessage);
-            StateHasChanged();
-
             // Send ONLY the RAG-augmented prompt to the model
             var modelMessages = new List<Message>
             {
@@ -82,7 +72,17 @@ public partial class Chat
                     Content = finalPrompt
                 }
             };
+
             ChatRequest request = new ChatRequest(modelMessages);
+
+            // Create a temporary assistant message in the UI
+            Message assistantMessage = new Message()
+            {
+                IsAssistant = true,
+                Content = ""
+            };
+            messages.Add(assistantMessage);
+            StateHasChanged();
 
             IAsyncEnumerable<string> chunks = ChatHandler.Stream(request);
 
