@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Text.Json;
 
 public class SearchService
@@ -10,13 +9,24 @@ public class SearchService
   {
     _http = http;
     _config = config;
+
+    var missingKeys = new List<string>();
+
+    if (string.IsNullOrEmpty(_config["Search:Endpoint"])) missingKeys.Add("Search:Endpoint");
+    if (string.IsNullOrEmpty(_config["Search:IndexName"])) missingKeys.Add("Search:IndexName");
+    if (string.IsNullOrEmpty(_config["Search:ApiKey"])) missingKeys.Add("Search:ApiKey");
+
+    if (missingKeys.Any())
+    {
+      throw new InvalidOperationException($"Missing required Search configuration values: {string.Join(", ", missingKeys)}");
+    }
   }
 
   public async Task<List<string?>> GetTopChunks(string userQuery)
   {
-    string searchEndpoint = _config["Search:Endpoint"];
-    string indexName = _config["Search:IndexName"];
-    string apiKey = _config["Search:ApiKey"];  // or use a managed identity header
+    string searchEndpoint = _config["Search:Endpoint"]!;
+    string indexName = _config["Search:IndexName"]!;
+    string apiKey = _config["Search:ApiKey"]!;
 
     var url = $"{searchEndpoint}/indexes/{indexName}/docs/search?api-version=2024-11-01-preview";
 
